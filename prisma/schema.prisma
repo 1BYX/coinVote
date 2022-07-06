@@ -1,0 +1,33 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model Vote {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
+  votedBuy    Coin @relation(name: "votesBuy", fields: [votedBuyId], references: [id])
+  votedBuyId  Int
+  votedSell   Coin @relation(name: "votesSell", fields: [votedSellId], references: [id])
+  votedSellId Int
+  votedWait   Coin @relation(name: "votesWait", fields: [votedWaitId], references: [id])
+  votedWaitId Int
+}
+
+model Coin {
+  id Int @id
+
+  coingeckoId String
+
+  votesFor     Vote[] @relation("votesBuy")
+  votesAgainst Vote[] @relation("votesSell")
+  votesWait    Vote[] @relation("votesWait")
+}
