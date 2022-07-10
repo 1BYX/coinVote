@@ -10,14 +10,26 @@ datasource db {
   referentialIntegrity = "prisma"
 }
 
-model Vote {
+model VoteBuy {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
 
-  votedBuy    Coin @relation(name: "votesBuy", fields: [votedBuyId], references: [id])
-  votedBuyId  Int
+  votedBuy   Coin @relation(name: "votesBuy", fields: [votedBuyId], references: [id])
+  votedBuyId Int
+}
+
+model VoteSell {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
   votedSell   Coin @relation(name: "votesSell", fields: [votedSellId], references: [id])
   votedSellId Int
+}
+
+model VoteWait {
+  id        String   @id @default(cuid())
+  createdAt DateTime @default(now())
+
   votedWait   Coin @relation(name: "votesWait", fields: [votedWaitId], references: [id])
   votedWaitId Int
 }
@@ -27,7 +39,7 @@ model Coin {
 
   coingeckoId String
 
-  votesFor     Vote[] @relation("votesBuy")
-  votesAgainst Vote[] @relation("votesSell")
-  votesWait    Vote[] @relation("votesWait")
+  votesFor     VoteBuy[]  @relation("votesBuy")
+  votesAgainst VoteSell[] @relation("votesSell")
+  votesWait    VoteWait[] @relation("votesWait")
 }
