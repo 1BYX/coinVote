@@ -39,7 +39,7 @@ model Coin {
 
   coingeckoId String
 
-  votesFor     VoteBuy[]  @relation("votesBuy")
-  votesAgainst VoteSell[] @relation("votesSell")
-  votesWait    VoteWait[] @relation("votesWait")
+  votesBuy  VoteBuy[]  @relation("votesBuy")
+  votesSell VoteSell[] @relation("votesSell")
+  votesWait VoteWait[] @relation("votesWait")
 }

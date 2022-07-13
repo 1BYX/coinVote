@@ -9,16 +9,17 @@ type Data = {
   msg?: string
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<Data>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
   if (req.method === 'GET') {
-    const allCoins = await prisma.coin.findMany({})
+    const allCoins = await prisma.coin.findMany({
+      include: {
+        votesBuy: true,
+        votesSell: true,
+        votesWait: true,
+      },
+    })
     if (!allCoins)
-      res
-        .status(500)
-        .json({ success: false, msg: 'internal server error, no coins found' })
+      res.status(500).json({ success: false, msg: 'internal server error, no coins found' })
     res.status(200).json({ success: true, coins: allCoins })
   }
 }

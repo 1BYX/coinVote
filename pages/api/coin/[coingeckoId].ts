@@ -1,12 +1,9 @@
-import { VoteWait } from '@prisma/client'
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { Coin, VoteBuy, VoteSell } from '@prisma/client'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { prisma } from '../../../utils/prisma'
 
 type Data = {
   success: boolean
-  coin?: Coin
+  coin?: any
   msg?: string
   vote?: any
 }
@@ -19,6 +16,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       const coin = await prisma.coin.findFirst({
         where: {
           coingeckoId: coingeckoId,
+        },
+        include: {
+          votesBuy: true,
+          votesSell: true,
+          votesWait: true,
         },
       })
       if (!coin) {
